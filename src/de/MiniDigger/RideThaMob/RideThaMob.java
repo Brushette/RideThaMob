@@ -69,6 +69,7 @@ public class RideThaMob extends JavaPlugin implements Listener {
 	}
 
 	@EventHandler
+	// Drachen "Feuer" spucken lassen
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		if (((e.getAction() == Action.RIGHT_CLICK_AIR) || (e.getAction() == Action.RIGHT_CLICK_BLOCK))
 				&& (e.getPlayer().getVehicle() != null)
@@ -93,10 +94,12 @@ public class RideThaMob extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void onPlayerSneak(PlayerToggleSneakEvent e) {
-		if (this.sneak.contains(e.getPlayer().getName()))
+		System.out.println("1");
+		if (this.sneak.contains(e.getPlayer().getName())) {
 			this.sneak.remove(e.getPlayer().getName());
-		else
+		} else {
 			this.sneak.add(e.getPlayer().getName());
+		}
 	}
 
 	@EventHandler
@@ -106,7 +109,7 @@ public class RideThaMob extends JavaPlugin implements Listener {
 		if (this.speed.contains(e.getPlayer().getName())) {
 			d = this.maxspeed;
 		}
-		if ((p.getVehicle() != null) && (this.sneak.contains(p.getName()))
+		if ((p.getVehicle() != null)/* && (this.sneak.contains(p.getName())) */
 				&& (this.control.contains(p.getName()))
 				&& (this.player.contains(p.getName()))) {
 			Entity v = p.getVehicle();
@@ -127,6 +130,7 @@ public class RideThaMob extends JavaPlugin implements Listener {
 				Player p = (Player) sender;
 				if (args.length != 0) {
 					if (args.length == 1) {
+						// Speed Command
 						if (args[0].equalsIgnoreCase("speed")) {
 							if (!p.hasPermission("ridethamob.speed")) {
 								if (this.lang.equalsIgnoreCase("de"))
@@ -157,8 +161,9 @@ public class RideThaMob extends JavaPlugin implements Listener {
 								}
 								this.speed.remove(p.getName());
 							}
-
-						} else if (args[0].equalsIgnoreCase("reload")) {
+						} else
+						// Reload Command
+						if (args[0].equalsIgnoreCase("reload")) {
 							if (p.hasPermission("ridethamob.reload")) {
 								reloadConfig();
 								loadConfig();
@@ -179,7 +184,9 @@ public class RideThaMob extends JavaPlugin implements Listener {
 								return true;
 							}
 
-						} else if (args[0].equalsIgnoreCase("control")) {
+						} else
+						// Control Command
+						if (args[0].equalsIgnoreCase("control")) {
 							if (p.hasPermission("ridethamob.control")) {
 								if (!this.control.contains(p.getName())) {
 									if (this.lang.equalsIgnoreCase("de"))
@@ -223,93 +230,20 @@ public class RideThaMob extends JavaPlugin implements Listener {
 
 					return true;
 				}
+				// aufsteigen
 				if (p.getVehicle() == null) {
 					this.player.add(p.getName());
-					List<?> l = new ArrayList<Object>();
+					List<Entity> l = new ArrayList<Entity>();
 					for (int i = 1; i < 11; i++) {
 						l = p.getNearbyEntities(i, i, i);
 						if (!l.isEmpty()) {
 							Entity e = (Entity) l.get(0);
-							if (e.getType() == EntityType.BAT) {
-								if (p.hasPermission("ridethamob.mob.bat"))
-									break;
-							} else if (e.getType() == EntityType.BLAZE) {
-								if (p.hasPermission("ridethamob.mob.blaze"))
-									break;
-							} else if (e.getType() == EntityType.CAVE_SPIDER) {
-								if (p.hasPermission("ridethamob.mob.cavespider"))
-									break;
-							} else if (e.getType() == EntityType.CHICKEN) {
-								if (p.hasPermission("ridethamob.mob.chicken"))
-									break;
-							} else if (e.getType() == EntityType.COW) {
-								if (p.hasPermission("ridethamob.mob.cow"))
-									break;
-							} else if (e.getType() == EntityType.CREEPER) {
-								if (p.hasPermission("ridethamob.mob.creeper"))
-									break;
-							} else if (e.getType() == EntityType.ENDER_DRAGON) {
-								if (p.hasPermission("ridethamob.mob.dragon"))
-									break;
-							} else if (e.getType() == EntityType.ENDERMAN) {
-								if (p.hasPermission("ridethamob.mob.enderman"))
-									break;
-							} else if (e.getType() == EntityType.GHAST) {
-								if (p.hasPermission("ridethamob.mob.ghast"))
-									break;
-							} else if (e.getType() == EntityType.GIANT) {
-								if (p.hasPermission("ridethamob.mob.giant"))
-									break;
-							} else if (e.getType() == EntityType.IRON_GOLEM) {
-								if (p.hasPermission("ridethamob.mob.irongolem"))
-									break;
-							} else if (e.getType() == EntityType.MAGMA_CUBE) {
-								if (p.hasPermission("ridethamob.mob.magmacube"))
-									break;
-							} else if (e.getType() == EntityType.MUSHROOM_COW) {
-								if (p.hasPermission("ridethamob.mob.mushroomcow"))
-									break;
-							} else if (e.getType() == EntityType.OCELOT) {
-								if (p.hasPermission("ridethamob.mob.ocelot"))
-									break;
-							} else if (e.getType() == EntityType.PIG) {
-								if (p.hasPermission("ridethamob.mob.pig"))
-									break;
-							} else if (e.getType() == EntityType.PIG_ZOMBIE) {
-								if (p.hasPermission("ridethamob.mob.pigzombie"))
-									break;
-							} else {
-								if (e.getType() == EntityType.PLAYER)
-									break;
-								if (e.getType() == EntityType.SHEEP ? !p
-										.hasPermission("ridethamob.mob.sheep")
-										: e.getType() == EntityType.SILVERFISH ? !p
-												.hasPermission("ridethamob.mob.silverfish")
-												: e.getType() == EntityType.SKELETON ? !p
-														.hasPermission("ridethamob.mob.skeleton")
-														: e.getType() == EntityType.SLIME ? !p
-																.hasPermission("ridethamob.mob.slime")
-																: e.getType() == EntityType.SNOWMAN ? !p
-																		.hasPermission("ridethamob.mob.snowman")
-																		: e.getType() == EntityType.SPIDER ? !p
-																				.hasPermission("ridethamob.mob.spider")
-																				: e.getType() == EntityType.SQUID ? !p
-																						.hasPermission("ridethamob.mob.squid")
-																						: e.getType() == EntityType.VILLAGER ? !p
-																								.hasPermission("ridethamob.mob.villager")
-																								: e.getType() == EntityType.WITCH ? !p
-																										.hasPermission("ridethamob.mob.witch")
-																										: e.getType() == EntityType.WITHER ? !p
-																												.hasPermission("ridethamob.mob.wither")
-																												: (e.getType() == EntityType.ZOMBIE)
-																														&& (p.hasPermission("ridethamob.mob.zombie"))) {
-									break;
-								}
+							if (p.hasPermission("ridethamob.mob." + e.getType())) {
+								break;
 							}
-							l.clear();
 						}
 					}
-
+					// keine in der nähe
 					if (l.isEmpty()) {
 						if (this.lang.equalsIgnoreCase("de"))
 							p.sendMessage(this.cprefix
@@ -379,7 +313,9 @@ public class RideThaMob extends JavaPlugin implements Listener {
 							p.sendMessage(this.cprefix
 									+ "You are now riding a " + e.getType());
 					}
-				} else {
+				}
+				// Aussteigen
+				else {
 					this.player.remove(p.getName());
 					p.getVehicle().eject();
 					if (this.lang.equalsIgnoreCase("de"))
@@ -389,7 +325,9 @@ public class RideThaMob extends JavaPlugin implements Listener {
 						p.sendMessage(this.cprefix
 								+ "Now u can walk on your own feeds again");
 				}
-			} else {
+			}
+			// version anzeigen
+			else {
 				sender.sendMessage(this.prefix + "---------RideThaMob---------");
 
 				sender.sendMessage(this.prefix + "Version "
