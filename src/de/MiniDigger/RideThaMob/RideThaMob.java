@@ -212,7 +212,7 @@ public class RideThaMob extends JavaPlugin implements Listener {
 							p.sendMessage(this.cprefix
 									+ "Befehl nicht gefunden!");
 						} else {
-							p.sendMessage(this.cprefix + "Commadn not found!");
+							p.sendMessage(this.cprefix + "Command not found!");
 						}
 
 					} else if (this.lang.equalsIgnoreCase("de"))
