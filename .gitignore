@@ -1,6 +1,12 @@
+# PreCompiled Classes
 *.class
 
 # Package Files #
 *.jar
 *.war
 *.ear
+
+# Eclipse stuff
+*.classpath
+*.project
+*.settings
