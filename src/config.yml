@@ -1,0 +1,3 @@
+lang: en # language: de, en
+defaultspeed: 1.0 # normal speed default: 1.0
+maxspeed: 1.5 # speedmode speed default: 1.5
