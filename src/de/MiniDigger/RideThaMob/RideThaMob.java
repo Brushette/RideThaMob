@@ -167,7 +167,7 @@ public class RideThaMob extends JavaPlugin implements Listener {
 											+ "Config neu geladen");
 								else
 									p.sendMessage(this.cprefix
-											+ "Config redloaded");
+											+ "Config reloaded");
 							} else {
 								if (this.lang.equalsIgnoreCase("de"))
 									p.sendMessage(this.cprefix
