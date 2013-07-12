@@ -14,6 +14,7 @@ permissions:
             ridethamob.player: true
             ridethamob.speed: true
             ridethamob.control: true
+            ridethamob.nyan: true
     ridethamob.mob.*:
         children:
             ridethamob.mob.bat: true
@@ -109,4 +110,6 @@ permissions:
     ridethamob.mob.wither:
         default: op
     ridethamob.mob.zombie:
+        default: op
+    ridethamob.nyan:
         default: op
