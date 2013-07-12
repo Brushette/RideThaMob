@@ -1,6 +1,12 @@
 package de.MiniDigger.RideThaMob;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,12 +36,24 @@ public class RideThaMob extends JavaPlugin implements Listener {
 	private String lang;
 	private double defaultspeed;
 	private double maxspeed;
+	public static int nyan_change_speed;
 	private ArrayList<String> speed;
 	private ArrayList<String> sneak;
 	private ArrayList<String> control;
 	private ArrayList<String> player;
 
 	public void onEnable() {
+		/*
+		 * File f = new File(getDataFolder(), "config.yml"); if (!f.exists()) {
+		 * try { f.createNewFile();
+		 * copyResourceYAML(getClass().getResourceAsStream("config.yml"),
+		 * getDataFolder()); } catch (IOException e) { System.out
+		 * .println(cprefix +
+		 * "Failed to create config.yml! Please report that error!");
+		 * e.printStackTrace(); }
+		 * 
+		 * }
+		 */
 		saveDefaultConfig();
 
 		getServer().getPluginManager().registerEvents(this, this);
@@ -62,10 +80,11 @@ public class RideThaMob extends JavaPlugin implements Listener {
 		this.lang = getConfig().getString("lang");
 		this.defaultspeed = getConfig().getDouble("defaultspeed");
 		this.maxspeed = getConfig().getDouble("maxspeed");
+		nyan_change_speed = getConfig().getInt("nyan_change_speed");
 	}
 
 	public void onDisable() {
-		saveConfig();
+
 	}
 
 	@EventHandler
@@ -74,7 +93,6 @@ public class RideThaMob extends JavaPlugin implements Listener {
 		if (((e.getAction() == Action.RIGHT_CLICK_AIR) || (e.getAction() == Action.RIGHT_CLICK_BLOCK))
 				&& (e.getPlayer().getVehicle() != null)
 				&& (e.getPlayer().getVehicle().getType() == EntityType.ENDER_DRAGON)) {
-			System.out.println("1");
 			EnderDragon dragon = (EnderDragon) e.getPlayer().getVehicle();
 			dragon.launchProjectile(Fireball.class);
 		}
@@ -94,7 +112,6 @@ public class RideThaMob extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void onPlayerSneak(PlayerToggleSneakEvent e) {
-		System.out.println("1");
 		if (this.sneak.contains(e.getPlayer().getName())) {
 			this.sneak.remove(e.getPlayer().getName());
 		} else {
@@ -215,7 +232,31 @@ public class RideThaMob extends JavaPlugin implements Listener {
 										+ "You are not allowed to use the control mode!");
 							}
 
+						} else if (args[0].equalsIgnoreCase("nyan")) {
+							if (p.hasPermission("ridethamob.nyan")) {
+								if (p.isInsideVehicle()
+										&& p.getVehicle().getType() == EntityType.SHEEP) {
+									NyanTask task = new NyanTask(this);
+									task.start(p);
+								} else {
+									if (this.lang.equalsIgnoreCase("de"))
+										p.sendMessage(this.cprefix
+												+ "Du bist nicht auf einem Schaf!");
+									else {
+										p.sendMessage(this.cprefix
+												+ "You have to ride a sheep to use that command!");
+									}
+								}
+
+							} else if (this.lang.equalsIgnoreCase("de"))
+								p.sendMessage(this.cprefix
+										+ "Du hast keinen Zufriff auf den Nyan Cat Modus!");
+							else {
+								p.sendMessage(this.cprefix
+										+ "You are not allowed to use the nyan cat mode!");
+							}
 						} else if (this.lang.equalsIgnoreCase("de")) {
+
 							p.sendMessage(this.cprefix
 									+ "Befehl nicht gefunden!");
 						} else {
@@ -338,5 +379,40 @@ public class RideThaMob extends JavaPlugin implements Listener {
 			}
 		}
 		return true;
+	}
+
+	public void copyResourceYAML(InputStream source, File target) {
+
+		BufferedWriter writer = null;
+		BufferedReader reader = new BufferedReader(
+				new InputStreamReader(source));
+
+		try {
+			writer = new BufferedWriter(new FileWriter(target));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			try {
+				String buffer = "";
+
+				while ((buffer = reader.readLine()) != null) {
+					writer.write(buffer);
+					writer.newLine();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} finally {
+			try {
+				if (writer != null)
+					writer.close();
+				if (reader != null)
+					reader.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
