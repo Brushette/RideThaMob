@@ -88,13 +88,18 @@ public class RideThaMob extends JavaPlugin implements Listener {
 	}
 
 	@EventHandler
-	// Drachen "Feuer" spucken lassen
 	public void onPlayerInteract(PlayerInteractEvent e) {
+		// Drachen "Feuer" spucken lassen
 		if (((e.getAction() == Action.RIGHT_CLICK_AIR) || (e.getAction() == Action.RIGHT_CLICK_BLOCK))
 				&& (e.getPlayer().getVehicle() != null)
 				&& (e.getPlayer().getVehicle().getType() == EntityType.ENDER_DRAGON)) {
 			EnderDragon dragon = (EnderDragon) e.getPlayer().getVehicle();
 			dragon.launchProjectile(Fireball.class);
+		}
+		// Riden ;D
+		if ((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)
+				&& e.getPlayer().getVehicle() == null) {
+			ride(e.getPlayer());
 		}
 	}
 
@@ -273,87 +278,7 @@ public class RideThaMob extends JavaPlugin implements Listener {
 				}
 				// aufsteigen
 				if (p.getVehicle() == null) {
-					this.player.add(p.getName());
-					List<Entity> l = new ArrayList<Entity>();
-					for (int i = 1; i < 11; i++) {
-						l = p.getNearbyEntities(i, i, i);
-						if (!l.isEmpty()) {
-							Entity e = (Entity) l.get(0);
-							if (p.hasPermission("ridethamob.mob." + e.getType())) {
-								break;
-							}
-						}
-					}
-					// keine in der nähe
-					if (l.isEmpty()) {
-						if (this.lang.equalsIgnoreCase("de"))
-							p.sendMessage(this.cprefix
-									+ "Es ist kein Reittier im Umkreis von 10 Blöcken das du reiten darfst!");
-						else
-							p.sendMessage(this.cprefix
-									+ "There is not mob in a radius of 10 blocks that you allowed to ride!");
-					} else {
-						Entity e = (Entity) l.get(0);
-						if (e.getType() == EntityType.ENDER_DRAGON) {
-							EnderDragon dr = (EnderDragon) e;
-							dr.setPassenger(p);
-							if (this.lang.equalsIgnoreCase("de"))
-								p.sendMessage(this.cprefix
-										+ "Du reitest jetzt einen Enderdrachen!");
-							else {
-								p.sendMessage(this.cprefix
-										+ "You are now riding a EnderDragon!");
-							}
-							return true;
-						}
-						if (e.getType() == EntityType.GIANT) {
-							Giant g = (Giant) e;
-							g.setPassenger(p);
-							if (this.lang.equalsIgnoreCase("de"))
-								p.sendMessage(this.cprefix
-										+ "Du reitest jetzt einen Giganten!");
-							else {
-								p.sendMessage(this.cprefix
-										+ "You are now riding a Giant!");
-							}
-						}
-						if (e.getType() == EntityType.PLAYER) {
-							Player o = (Player) e;
-							if ((p.hasPermission("ridethamob.player.*"))
-									|| (p.hasPermission("ridethamob.player."
-											+ p.getName()))) {
-								o.setPassenger(p);
-
-								if (this.lang.equalsIgnoreCase("de"))
-									p.sendMessage(this.cprefix
-											+ "Du reitest jetzt "
-											+ o.getDisplayName());
-								else {
-									p.sendMessage(this.cprefix
-											+ "You are now riding "
-											+ o.getDisplayName() + "!");
-								}
-								return true;
-							}
-							if (this.lang.equalsIgnoreCase("de"))
-								p.sendMessage(this.cprefix + "Du darfst "
-										+ o.getDisplayName() + " nicht reiten!");
-							else {
-								p.sendMessage(this.cprefix
-										+ "You are not allowed to ride "
-										+ o.getDisplayName() + "!");
-							}
-						}
-
-						e.setPassenger(p);
-
-						if (this.lang.equalsIgnoreCase("de"))
-							p.sendMessage(this.cprefix
-									+ "Du reitest jetzt ein(e)" + e.getType());
-						else
-							p.sendMessage(this.cprefix
-									+ "You are now riding a " + e.getType());
-					}
+					ride(p);
 				}
 				// Aussteigen
 				else {
@@ -379,6 +304,85 @@ public class RideThaMob extends JavaPlugin implements Listener {
 			}
 		}
 		return true;
+	}
+
+	private void ride(Player p) {
+		this.player.add(p.getName());
+		List<Entity> l = new ArrayList<Entity>();
+		for (int i = 1; i < 11; i++) {
+			l = p.getNearbyEntities(i, i, i);
+			if (!l.isEmpty()) {
+				Entity e = (Entity) l.get(0);
+				if (p.hasPermission("ridethamob.mob." + e.getType())) {
+					break;
+				}
+			}
+		}
+		// keine in der nähe
+		if (l.isEmpty()) {
+			if (this.lang.equalsIgnoreCase("de"))
+				p.sendMessage(this.cprefix
+						+ "Es ist kein Reittier im Umkreis von 10 Blöcken das du reiten darfst!");
+			else
+				p.sendMessage(this.cprefix
+						+ "There is not mob in a radius of 10 blocks that you allowed to ride!");
+		} else {
+			Entity e = (Entity) l.get(0);
+			if (e.getType() == EntityType.ENDER_DRAGON) {
+				EnderDragon dr = (EnderDragon) e;
+				dr.setPassenger(p);
+				if (this.lang.equalsIgnoreCase("de"))
+					p.sendMessage(this.cprefix
+							+ "Du reitest jetzt einen Enderdrachen!");
+				else {
+					p.sendMessage(this.cprefix
+							+ "You are now riding a EnderDragon!");
+				}
+				return;
+			}
+			if (e.getType() == EntityType.GIANT) {
+				Giant g = (Giant) e;
+				g.setPassenger(p);
+				if (this.lang.equalsIgnoreCase("de"))
+					p.sendMessage(this.cprefix
+							+ "Du reitest jetzt einen Giganten!");
+				else {
+					p.sendMessage(this.cprefix + "You are now riding a Giant!");
+				}
+			}
+			if (e.getType() == EntityType.PLAYER) {
+				Player o = (Player) e;
+				if ((p.hasPermission("ridethamob.player.*"))
+						|| (p.hasPermission("ridethamob.player." + p.getName()))) {
+					o.setPassenger(p);
+
+					if (this.lang.equalsIgnoreCase("de"))
+						p.sendMessage(this.cprefix + "Du reitest jetzt "
+								+ o.getDisplayName());
+					else {
+						p.sendMessage(this.cprefix + "You are now riding "
+								+ o.getDisplayName() + "!");
+					}
+					return;
+				}
+				if (this.lang.equalsIgnoreCase("de"))
+					p.sendMessage(this.cprefix + "Du darfst "
+							+ o.getDisplayName() + " nicht reiten!");
+				else {
+					p.sendMessage(this.cprefix + "You are not allowed to ride "
+							+ o.getDisplayName() + "!");
+				}
+			}
+
+			e.setPassenger(p);
+
+			if (this.lang.equalsIgnoreCase("de"))
+				p.sendMessage(this.cprefix + "Du reitest jetzt ein(e)"
+						+ e.getType());
+			else
+				p.sendMessage(this.cprefix + "You are now riding a "
+						+ e.getType());
+		}
 	}
 
 	public void copyResourceYAML(InputStream source, File target) {
