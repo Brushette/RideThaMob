@@ -1,6 +1,6 @@
 name: RideThaMob
 author: MiniDigger
-version: 1.1
+version: 1.1.1
 main: de.MiniDigger.RideThaMob.RideThaMob
 commands:
   RideThaMob:
