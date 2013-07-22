@@ -41,6 +41,7 @@ public class RideThaMob extends JavaPlugin implements Listener {
 	private ArrayList<String> sneak;
 	private ArrayList<String> control;
 	private ArrayList<String> player;
+	private ArrayList<EntityType> entity_blacklist;
 
 	public void onEnable() {
 		/*
@@ -61,6 +62,23 @@ public class RideThaMob extends JavaPlugin implements Listener {
 		this.prefix = ("[" + getDescription().getName() + "] ");
 		this.cprefix = (ChatColor.AQUA + "[" + ChatColor.RED
 				+ getDescription().getName() + ChatColor.AQUA + "] " + ChatColor.RESET);
+
+		entity_blacklist.add(EntityType.DROPPED_ITEM);
+		entity_blacklist.add(EntityType.ENDER_CRYSTAL);
+		entity_blacklist.add(EntityType.ENDER_SIGNAL);
+		entity_blacklist.add(EntityType.EXPERIENCE_ORB);
+		entity_blacklist.add(EntityType.FIREBALL);
+		entity_blacklist.add(EntityType.FISHING_HOOK);
+		entity_blacklist.add(EntityType.FIREWORK);
+		entity_blacklist.add(EntityType.ITEM_FRAME);
+		entity_blacklist.add(EntityType.LIGHTNING);
+		entity_blacklist.add(EntityType.PAINTING);
+		entity_blacklist.add(EntityType.PRIMED_TNT);
+		entity_blacklist.add(EntityType.SMALL_FIREBALL);
+		entity_blacklist.add(EntityType.SPLASH_POTION);
+		entity_blacklist.add(EntityType.THROWN_EXP_BOTTLE);
+		entity_blacklist.add(EntityType.WEATHER);
+		entity_blacklist.add(EntityType.WITHER_SKULL);
 
 		loadConfig();
 		try {
@@ -327,12 +345,13 @@ public class RideThaMob extends JavaPlugin implements Listener {
 			l = p.getNearbyEntities(i, i, i);
 			if (!l.isEmpty()) {
 				for (Entity e : l) {
-					if (p.hasPermission("ridethamob.mob."
-							+ e.getType().toString())) {
-						System.out.println("ridethamob.mob."
-								+ e.getType().toString().toLowerCase());
-						ride(p, e);
-						return;
+					if (!entity_blacklist.contains(e.getType())) {
+
+						if (p.hasPermission("ridethamob.mob."
+								+ e.getType().toString())) {
+							ride(p, e);
+							return;
+						}
 					}
 				}
 
