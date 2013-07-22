@@ -62,7 +62,7 @@ public class RideThaMob extends JavaPlugin implements Listener {
 		this.prefix = ("[" + getDescription().getName() + "] ");
 		this.cprefix = (ChatColor.AQUA + "[" + ChatColor.RED
 				+ getDescription().getName() + ChatColor.AQUA + "] " + ChatColor.RESET);
-
+		entity_blacklist = new ArrayList<>();
 		entity_blacklist.add(EntityType.DROPPED_ITEM);
 		entity_blacklist.add(EntityType.ENDER_CRYSTAL);
 		entity_blacklist.add(EntityType.ENDER_SIGNAL);
