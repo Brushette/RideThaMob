@@ -240,7 +240,7 @@ public class Commands implements CommandExecutor {
 				}
 			} else if (RideThaMob.lang.equalsIgnoreCase("de"))
 				s.sendMessage(RideThaMob.cprefix
-						+ "Das Plugin wurde erfolgreich Upgedatet! Beim nächsten Neustart wirst du die neuste Version haben");
+						+ "Das Plugin wurde erfolgreich Upgedatet! Beim n" + Character.toString((char)228) + "chsten Neustart wirst du die neuste Version haben");
 			else {
 				s.sendMessage(RideThaMob.cprefix
 						+ "Plugin updatet! Please restart your server!");

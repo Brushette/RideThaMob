@@ -29,7 +29,7 @@ public class RideThaMobListener implements Listener {
 				&& RideThaMob.update) {
 			if (RideThaMob.lang.equalsIgnoreCase("de")) {
 				e.getPlayer().sendMessage(
-						ChatColor.YELLOW + "Es ist ein Update verfügbar: "
+						ChatColor.YELLOW + "Es ist ein Update verf" + Character.toString((char)252) + "gbar: "
 								+ RideThaMob.updater.getLatestName() + "("
 								+ RideThaMob.updater.getLatestType() + ")");
 				e.getPlayer()
@@ -128,11 +128,6 @@ public class RideThaMobListener implements Listener {
 		}
 	}
 
-	/**
-	 * Sucht in der nähe nach Reitbaren Entitys und reitet diese gegebenenfalls
-	 * 
-	 * @param p
-	 */
 	public static void checkNearRideable(Player p) {
 		RideThaMob.player.add(p.getName());
 		List<Entity> l = new ArrayList<Entity>();
@@ -152,10 +147,10 @@ public class RideThaMobListener implements Listener {
 
 			}
 		}
-		// keine in der nähe
+		
 		if (RideThaMob.lang.equalsIgnoreCase("de"))
 			p.sendMessage(RideThaMob.cprefix
-					+ "Es ist kein Reittier im Umkreis von 10 Blöcken das du reiten darfst!");
+					+ "Es ist kein Reittier im Umkreis von 10 Bl" + Character.toString((char)246) + "cken das du reiten darfst!");
 		else
 			p.sendMessage(RideThaMob.cprefix
 					+ "There is not mob in a radius of 10 blocks that you allowed to ride!");
