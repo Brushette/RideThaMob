@@ -24,6 +24,7 @@ public class NyanTask implements Runnable {
 						RideThaMob.nyan_change_speed);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void run() {
 		if (p.isInsideVehicle() && p.getVehicle().getType() == EntityType.SHEEP) {
 			Sheep sheep = (Sheep) p.getVehicle();

@@ -1,67 +1,162 @@
 package de.MiniDigger.RideThaMob;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Filter;
+import java.util.logging.Logger;
 
+import net.minecraft.server.v1_7_R1.BiomeBase;
+import net.minecraft.server.v1_7_R1.BiomeMeta;
+import net.minecraft.server.v1_7_R1.EntityPlayer;
+import net.minecraft.server.v1_7_R1.EntityTypes;
+import net.minecraft.server.v1_7_R1.EntityWolf;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EnderDragon;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.Giant;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
-public class RideThaMob extends JavaPlugin implements Listener {
-	private String prefix;
-	private String cprefix;
-	private String lang;
-	private double defaultspeed;
-	private double maxspeed;
+import de.MiniDigger.RideThaMob.Entity.RideAbleEntityType;
+import de.MiniDigger.RideThaMob.Entity.RideAblePlayer;
+import de.MiniDigger.RideThaMob.Entity.RideAbleWolf;
+
+public class RideThaMob extends JavaPlugin {
+	public static String prefix;
+	public static String cprefix;
+	public static String lang;
+	public static double defaultspeed;
+	public static double maxspeed;
 	public static int nyan_change_speed;
-	private ArrayList<String> speed;
-	private ArrayList<String> sneak;
-	private ArrayList<String> control;
-	private ArrayList<String> player;
-	private ArrayList<EntityType> entity_blacklist;
+	public static ArrayList<String> speed;
+	public static ArrayList<String> sneak;
+	public static ArrayList<String> control;
+	public static ArrayList<String> player;
+	public static ArrayList<String> fly;
+	public static ArrayList<EntityType> entity_blacklist;
+	public static RideThaMob pl;
+	public static Updater updater;
+	public static boolean update;
+	public static File file;
+	public static boolean check_update;
+	private String version = "1.6.4-R1.0";// eigentlich 1.6.4
 
 	public void onEnable() {
-		/*
-		 * File f = new File(getDataFolder(), "config.yml"); if (!f.exists()) {
-		 * try { f.createNewFile();
-		 * copyResourceYAML(getClass().getResourceAsStream("config.yml"),
-		 * getDataFolder()); } catch (IOException e) { System.out
-		 * .println(cprefix +
-		 * "Failed to create config.yml! Please report that error!");
-		 * e.printStackTrace(); }
-		 * 
-		 * }
-		 */
+		pl = this;
+		loadConfig();
+
+		registerEvents();
+
+		registerCommands();
+
+		RideThaMob.prefix = ("[" + getDescription().getName() + "] ");
+		RideThaMob.cprefix = (ChatColor.AQUA + "[" + ChatColor.RED
+				+ getDescription().getName() + ChatColor.AQUA + "] " + ChatColor.RESET);
+
+		setupMetrics();
+
+		setupEntityBlacklist();
+
+		if (RideThaMob.check_update) {
+			setupUpdater();
+		}
+
+		RideThaMob.speed = new ArrayList<String>();
+		RideThaMob.sneak = new ArrayList<String>();
+		RideThaMob.control = new ArrayList<String>();
+		RideThaMob.player = new ArrayList<String>();
+		RideThaMob.fly = new ArrayList<String>();
+
+		if (Bukkit.getVersion().contains(version)) {
+			registerEntities();
+		} else {
+			Bukkit.getConsoleSender()
+					.sendMessage(
+							ChatColor.YELLOW
+									+ "[RideThaMob] WARINING:"
+									+ ChatColor.RED
+									+ "Failed to register the custom Entitys! You cant control the Entitys with the wasd keys now! Please make sure your are running the right Bukkit version("
+									+ version
+									+ ") if you want to use the wasd mode!");
+			Bukkit.getConsoleSender().sendMessage(
+					ChatColor.YELLOW + "[RideThaMob] WARINING:" + ChatColor.RED
+							+ "You are running " + Bukkit.getVersion());
+		}
+
+		Filter filter = new ConsoleFilter();
+		Bukkit.getLogger().setFilter(filter);
+		Logger.getLogger("Minecraft").setFilter(filter);
+	}
+
+	public void onDisable() {
+
+	}
+
+	public void loadConfig() {
 		saveDefaultConfig();
 
-		getServer().getPluginManager().registerEvents(this, this);
+		RideThaMob.lang = getConfig().getString("lang");
+		RideThaMob.defaultspeed = getConfig().getDouble("defaultspeed");
+		RideThaMob.maxspeed = getConfig().getDouble("maxspeed");
+		nyan_change_speed = getConfig().getInt("nyan_change_speed");
+		try {
+			RideThaMob.check_update = getConfig().getBoolean(
+					"check_for_updates");
+		} catch (Exception e) {
+			RideThaMob.check_update = false;
+			getConfig().set("check_for_updates", false);
+		}
+	}
 
-		this.prefix = ("[" + getDescription().getName() + "] ");
-		this.cprefix = (ChatColor.AQUA + "[" + ChatColor.RED
-				+ getDescription().getName() + ChatColor.AQUA + "] " + ChatColor.RESET);
+	private void setupUpdater() {
+		file = this.getFile();
+		updater = new Updater(pl, 53240, file, Updater.UpdateType.NO_DOWNLOAD,
+				false);
+
+		Updater.UpdateResult result = updater.getResult();
+		switch (result) {
+		case FAIL_DBO:
+			getLogger().info("Could not reach dev.bukkit.org. It is offline?");
+			update = false;
+			break;
+		case FAIL_NOVERSION:
+			getLogger().info("Failed to look for Updates: FAIL_NOVERSION");
+			update = false;
+			break;
+		case FAIL_APIKEY:
+			getLogger().info("Failed to look for Updates: FAIL_APIKEY");
+			update = false;
+			break;
+		case FAIL_BADID:
+			getLogger().info("Failed to look for Updates: FAIL_BADID");
+			update = false;
+			break;
+		case UPDATE_AVAILABLE:
+			Bukkit.getConsoleSender()
+					.sendMessage(
+							ChatColor.YELLOW
+									+ "[RideThaMob] There is an Update avalible. Type '/ridethamob update' to download it.");
+			update = true;
+			break;
+		default:
+			update = false;
+			break;
+		}
+	}
+
+	private void registerCommands() {
+		getCommand("RideThaMob").setExecutor(new Commands());
+	}
+
+	private void registerEvents() {
+		getServer().getPluginManager().registerEvents(new RideThaMobListener(),
+				pl);
+	}
+
+	private void setupEntityBlacklist() {
 		entity_blacklist = new ArrayList<>();
 		entity_blacklist.add(EntityType.DROPPED_ITEM);
 		entity_blacklist.add(EntityType.ENDER_CRYSTAL);
@@ -79,387 +174,80 @@ public class RideThaMob extends JavaPlugin implements Listener {
 		entity_blacklist.add(EntityType.THROWN_EXP_BOTTLE);
 		entity_blacklist.add(EntityType.WEATHER);
 		entity_blacklist.add(EntityType.WITHER_SKULL);
+	}
 
-		loadConfig();
+	private void setupMetrics() {
 		try {
-			Metrics metrics = new Metrics(this);
+			Metrics metrics = new Metrics(pl);
 			metrics.start();
 		} catch (IOException e) {
 			getLogger().warning("Failed to load the Metrics :(");
 		}
-
-		this.speed = new ArrayList<String>();
-		this.sneak = new ArrayList<String>();
-		this.control = new ArrayList<String>();
-		this.player = new ArrayList<String>();
 	}
 
-	public void loadConfig() {
-		this.lang = getConfig().getString("lang");
-		this.defaultspeed = getConfig().getDouble("defaultspeed");
-		this.maxspeed = getConfig().getDouble("maxspeed");
-		nyan_change_speed = getConfig().getInt("nyan_change_speed");
-	}
-
-	public void onDisable() {
-
-	}
-
-	@EventHandler
-	public void onPlayerInteract(PlayerInteractEvent e) {
-		// Drachen "Feuer" spucken lassen
-		if (((e.getAction() == Action.RIGHT_CLICK_AIR) || (e.getAction() == Action.RIGHT_CLICK_BLOCK))
-				&& (e.getPlayer().getVehicle() != null)
-				&& (e.getPlayer().getVehicle().getType() == EntityType.ENDER_DRAGON)) {
-			EnderDragon dragon = (EnderDragon) e.getPlayer().getVehicle();
-			dragon.launchProjectile(Fireball.class);
-		}
-		// Riden ;D
-		if (e.getAction() == Action.RIGHT_CLICK_BLOCK
-				&& e.getPlayer().getVehicle() == null) {
-			for (Entity en : e.getClickedBlock().getLocation().getWorld()
-					.getEntities()) {
-				if (en.getLocation().getX() == e.getClickedBlock()
-						.getLocation().getX()
-						&& en.getLocation().getZ() == e.getClickedBlock()
-								.getLocation().getZ()) {
-					ride(e.getPlayer(), en);
-					break;
-				}
+	private void registerEntities() {
+		// Registeres the Custom Entitys
+		for (RideAbleEntityType entity : RideAbleEntityType.values()) {
+			try {
+				Method a = EntityTypes.class
+						.getDeclaredMethod("a", new Class<?>[] { Class.class,
+								String.class, int.class });
+				a.setAccessible(true);
+				a.invoke(null, entity.getCustomClass(), entity.getName(),
+						entity.getID());
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
-	}
-
-	@EventHandler
-	public void onEntityDamage(EntityDamageEvent e) {
-		if ((e.getEntity().getPassenger() != null)
-				&& ((e.getEntity().getPassenger() instanceof Player))) {
-			Player p = (Player) e.getEntity().getPassenger();
-			if (p.hasPermission("ridethamob.god")) {
-				e.setDamage(0.0);
-				e.setCancelled(true);
-			}
-		}
-	}
-
-	@EventHandler
-	public void onPlayerSneak(PlayerToggleSneakEvent e) {
-		if (this.sneak.contains(e.getPlayer().getName())) {
-			this.sneak.remove(e.getPlayer().getName());
-		} else {
-			this.sneak.add(e.getPlayer().getName());
-		}
-	}
-
-	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent e) {
-		Player p = e.getPlayer();
-		double d = this.defaultspeed;
-		if (this.speed.contains(e.getPlayer().getName())) {
-			d = this.maxspeed;
-		}
-		if ((p.getVehicle() != null)/* && (this.sneak.contains(p.getName())) */
-				&& (this.control.contains(p.getName()))
-				&& (this.player.contains(p.getName()))) {
-			Entity v = p.getVehicle();
-			Vector f = p.getEyeLocation().getDirection().multiply(d);
-			v.setVelocity(f);
-			v.teleport(new Location(v.getWorld(), v.getLocation().getX(), v
-					.getLocation().getY(), v.getLocation().getZ(), p
-					.getEyeLocation().getPitch(), p.getEyeLocation().getYaw()));
-			p.setFallDistance(0.0F);
-			v.setFallDistance(0.0F);
-		}
-	}
-
-	public boolean onCommand(CommandSender sender, Command cmd, String label,
-			String[] args) {
-		if (cmd.getName().equalsIgnoreCase("ridethamob")) {
-			if ((sender instanceof Player)) {
-				Player p = (Player) sender;
-				if (args.length != 0) {
-					if (args.length == 1) {
-						// Speed Command
-						if (args[0].equalsIgnoreCase("speed")) {
-							if (!p.hasPermission("ridethamob.speed")) {
-								if (this.lang.equalsIgnoreCase("de"))
-									p.sendMessage(this.cprefix
-											+ "Du hast keinen Zufriff auf den Speed Modus!");
-								else {
-									p.sendMessage(this.cprefix
-											+ "You are not allowed to use the speed mode!");
-								}
-								return true;
-							}
-							if (!this.speed.contains(p.getName())) {
-								if (this.lang.equalsIgnoreCase("de"))
-									p.sendMessage(this.cprefix
-											+ "Speed Modus aktiviert");
-								else {
-									p.sendMessage(this.cprefix
-											+ "Speed Mode activated");
-								}
-								this.speed.add(p.getName());
-							} else {
-								if (this.lang.equalsIgnoreCase("de"))
-									p.sendMessage(this.cprefix
-											+ "Speed Modus deaktiviert");
-								else {
-									p.sendMessage(this.cprefix
-											+ "Speed Mode deactivated");
-								}
-								this.speed.remove(p.getName());
-							}
-						} else
-						// Reload Command
-						if (args[0].equalsIgnoreCase("reload")) {
-							if (p.hasPermission("ridethamob.reload")) {
-								reloadConfig();
-								loadConfig();
-								if (this.lang.equalsIgnoreCase("de"))
-									p.sendMessage(this.cprefix
-											+ "Config neu geladen");
-								else
-									p.sendMessage(this.cprefix
-											+ "Config reloaded");
-							} else {
-								if (this.lang.equalsIgnoreCase("de"))
-									p.sendMessage(this.cprefix
-											+ "Du hast keinen Zufriff auf diesen Befehl!");
-								else {
-									p.sendMessage(this.cprefix
-											+ "You are not allowed to use this command!");
-								}
-								return true;
-							}
-
-						} else
-						// Control Command
-						if (args[0].equalsIgnoreCase("control")) {
-							if (p.hasPermission("ridethamob.control")) {
-								if (!this.control.contains(p.getName())) {
-									if (this.lang.equalsIgnoreCase("de"))
-										p.sendMessage(this.cprefix
-												+ "Control Modus aktiviert");
-									else {
-										p.sendMessage(this.cprefix
-												+ "Control Mode activated");
-									}
-									this.control.add(p.getName());
-								} else {
-									if (this.lang.equalsIgnoreCase("de"))
-										p.sendMessage(this.cprefix
-												+ "Control Modus deaktiviert");
-									else {
-										p.sendMessage(this.cprefix
-												+ "Control Mode deactivated");
-									}
-									this.control.remove(p.getName());
-								}
-							} else if (this.lang.equalsIgnoreCase("de"))
-								p.sendMessage(this.cprefix
-										+ "Du hast keinen Zufriff auf den Control Modus!");
-							else {
-								p.sendMessage(this.cprefix
-										+ "You are not allowed to use the control mode!");
-							}
-
-						} else if (args[0].equalsIgnoreCase("nyan")) {
-							if (p.hasPermission("ridethamob.nyan")) {
-								if (p.isInsideVehicle()
-										&& p.getVehicle().getType() == EntityType.SHEEP) {
-									NyanTask task = new NyanTask(this);
-									task.start(p);
-								} else {
-									if (this.lang.equalsIgnoreCase("de"))
-										p.sendMessage(this.cprefix
-												+ "Du bist nicht auf einem Schaf!");
-									else {
-										p.sendMessage(this.cprefix
-												+ "You have to ride a sheep to use that command!");
-									}
-								}
-
-							} else if (this.lang.equalsIgnoreCase("de"))
-								p.sendMessage(this.cprefix
-										+ "Du hast keinen Zufriff auf den Nyan Cat Modus!");
-							else {
-								p.sendMessage(this.cprefix
-										+ "You are not allowed to use the nyan cat mode!");
-							}
-						} else if (this.lang.equalsIgnoreCase("de")) {
-
-							p.sendMessage(this.cprefix
-									+ "Befehl nicht gefunden!");
-						} else {
-							p.sendMessage(this.cprefix + "Command not found!");
-						}
-
-					} else if (this.lang.equalsIgnoreCase("de"))
-						p.sendMessage(this.cprefix + "Zu viele Argumente!");
-					else {
-						p.sendMessage(this.cprefix + "Too much arguments!");
-					}
-
-					return true;
-				}
-				// aufsteigen
-				if (p.getVehicle() == null) {
-					checkNearRideable(p);
-				}
-				// Aussteigen
-				else {
-					this.player.remove(p.getName());
-					p.getVehicle().eject();
-					if (this.lang.equalsIgnoreCase("de"))
-						p.sendMessage(this.cprefix
-								+ "Du kann nun wieder alleine gehen :D");
-					else
-						p.sendMessage(this.cprefix
-								+ "Now u can walk on your own feeds again");
-				}
-			}
-			// version anzeigen
-			else {
-				sender.sendMessage(this.prefix + "---------RideThaMob---------");
-
-				sender.sendMessage(this.prefix + "Version "
-						+ getDescription().getVersion() + " by "
-						+ (String) getDescription().getAuthors().get(0));
-
-				sender.sendMessage(this.prefix + "----------------------------");
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Sucht in der nähe nach Reitbaren Entitys und reitet diese gegebenenfalls
-	 * 
-	 * @param p
-	 */
-	private void checkNearRideable(Player p) {
-		this.player.add(p.getName());
-		List<Entity> l = new ArrayList<Entity>();
-		for (int i = 1; i < 11; i++) {
-			l = p.getNearbyEntities(i, i, i);
-			if (!l.isEmpty()) {
-				for (Entity e : l) {
-					if (!entity_blacklist.contains(e.getType())) {
-
-						if (p.hasPermission("ridethamob.mob."
-								+ e.getType().toString())) {
-							ride(p, e);
-							return;
-						}
-					}
-				}
-
-			}
-		}
-		// keine in der nähe
-		if (this.lang.equalsIgnoreCase("de"))
-			p.sendMessage(this.cprefix
-					+ "Es ist kein Reittier im Umkreis von 10 Blöcken das du reiten darfst!");
-		else
-			p.sendMessage(this.cprefix
-					+ "There is not mob in a radius of 10 blocks that you allowed to ride!");
-	}
-
-	/**
-	 * Reitet ein Entity
-	 * 
-	 * @param p
-	 * @param e
-	 */
-	private void ride(Player p, Entity e) {
-		if (e.getType() == EntityType.ENDER_DRAGON) {
-			EnderDragon dr = (EnderDragon) e;
-			dr.setPassenger(p);
-			if (this.lang.equalsIgnoreCase("de"))
-				p.sendMessage(this.cprefix
-						+ "Du reitest jetzt einen Enderdrachen!");
-			else {
-				p.sendMessage(this.cprefix
-						+ "You are now riding a EnderDragon!");
-			}
-			return;
-		}
-		if (e.getType() == EntityType.GIANT) {
-			Giant g = (Giant) e;
-			g.setPassenger(p);
-			if (this.lang.equalsIgnoreCase("de"))
-				p.sendMessage(this.cprefix + "Du reitest jetzt einen Giganten!");
-			else {
-				p.sendMessage(this.cprefix + "You are now riding a Giant!");
-			}
-		}
-		if (e.getType() == EntityType.PLAYER) {
-			Player o = (Player) e;
-			if ((p.hasPermission("ridethamob.player.*"))
-					|| (p.hasPermission("ridethamob.player." + p.getName()))) {
-				o.setPassenger(p);
-
-				if (this.lang.equalsIgnoreCase("de"))
-					p.sendMessage(this.cprefix + "Du reitest jetzt "
-							+ o.getDisplayName());
-				else {
-					p.sendMessage(this.cprefix + "You are now riding "
-							+ o.getDisplayName() + "!");
-				}
-				return;
-			}
-			if (this.lang.equalsIgnoreCase("de"))
-				p.sendMessage(this.cprefix + "Du darfst " + o.getDisplayName()
-						+ " nicht reiten!");
-			else {
-				p.sendMessage(this.cprefix + "You are not allowed to ride "
-						+ o.getDisplayName() + "!");
-			}
-		}
-
-		e.setPassenger(p);
-
-		if (this.lang.equalsIgnoreCase("de"))
-			p.sendMessage(this.cprefix + "Du reitest jetzt ein(e)"
-					+ e.getType());
-		else
-			p.sendMessage(this.cprefix + "You are now riding a " + e.getType());
-
-	}
-
-	public void copyResourceYAML(InputStream source, File target) {
-
-		BufferedWriter writer = null;
-		BufferedReader reader = new BufferedReader(
-				new InputStreamReader(source));
-
 		try {
-			writer = new BufferedWriter(new FileWriter(target));
-		} catch (IOException e) {
+			Method a = EntityTypes.class.getDeclaredMethod("a", new Class<?>[] {
+					Class.class, String.class, int.class });
+			a.setAccessible(true);
+			a.invoke(null, RideAblePlayer.class, "Player", 78);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		try {
-			try {
-				String buffer = "";
-
-				while ((buffer = reader.readLine()) != null) {
-					writer.write(buffer);
-					writer.newLine();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+			Method a = EntityTypes.class.getDeclaredMethod("a", new Class<?>[] {
+					Class.class, String.class, int.class });
+			a.setAccessible(true);
+			a.invoke(null, RideAbleWolf.class, "Wolf", 95);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// Replaces Entitys in the bioms
+		for (BiomeBase biomeBase : BiomeBase.n()) {
+			if (biomeBase == null) {
+				break;
 			}
-		} finally {
-			try {
-				if (writer != null)
-					writer.close();
-				if (reader != null)
-					reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+
+			for (String field : new String[] { "K", "J", "L", "M" }) {
+				try {
+					Field list = BiomeBase.class.getDeclaredField(field);
+					list.setAccessible(true);
+					@SuppressWarnings("unchecked")
+					List<BiomeMeta> mobList = (List<BiomeMeta>) list
+							.get(biomeBase);
+
+					for (BiomeMeta meta : mobList) {
+						for (RideAbleEntityType entity : RideAbleEntityType
+								.values()) {
+							if (entity.getNMSClass().equals(meta.b)) {
+								meta.b = entity.getCustomClass();
+							}
+						}
+						if (EntityPlayer.class.equals(meta.b)) {
+							meta.b = RideAblePlayer.class;
+						}
+						if (EntityWolf.class.equals(meta.b)) {
+							meta.b = RideAbleWolf.class;
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
+
 }
