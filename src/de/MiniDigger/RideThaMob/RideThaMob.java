@@ -2,18 +2,9 @@ package de.MiniDigger.RideThaMob;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Filter;
 import java.util.logging.Logger;
-
-import net.minecraft.server.v1_7_R1.BiomeBase;
-import net.minecraft.server.v1_7_R1.BiomeMeta;
-import net.minecraft.server.v1_7_R1.EntityPlayer;
-import net.minecraft.server.v1_7_R1.EntityTypes;
-import net.minecraft.server.v1_7_R1.EntityWolf;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,8 +12,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.MiniDigger.RideThaMob.Entity.RideAbleEntityType;
-import de.MiniDigger.RideThaMob.Entity.RideAblePlayer;
-import de.MiniDigger.RideThaMob.Entity.RideAbleWolf;
 
 public class RideThaMob extends JavaPlugin {
 	public static String prefix;
@@ -42,7 +31,7 @@ public class RideThaMob extends JavaPlugin {
 	public static boolean update;
 	public static File file;
 	public static boolean check_update;
-	private String version = "1.6.4-R1.0";// eigentlich 1.6.4
+	private String version = "(MC: 1.7.2)";
 
 	public void onEnable() {
 		pl = this;
@@ -71,7 +60,7 @@ public class RideThaMob extends JavaPlugin {
 		RideThaMob.fly = new ArrayList<String>();
 
 		if (Bukkit.getVersion().contains(version)) {
-			registerEntities();
+			RideAbleEntityType.registerEntities();
 		} else {
 			Bukkit.getConsoleSender()
 					.sendMessage(
@@ -92,7 +81,7 @@ public class RideThaMob extends JavaPlugin {
 	}
 
 	public void onDisable() {
-
+		RideAbleEntityType.unregisterEntities();
 	}
 
 	public void loadConfig() {
@@ -184,70 +173,4 @@ public class RideThaMob extends JavaPlugin {
 			getLogger().warning("Failed to load the Metrics :(");
 		}
 	}
-
-	private void registerEntities() {
-		// Registeres the Custom Entitys
-		for (RideAbleEntityType entity : RideAbleEntityType.values()) {
-			try {
-				Method a = EntityTypes.class
-						.getDeclaredMethod("a", new Class<?>[] { Class.class,
-								String.class, int.class });
-				a.setAccessible(true);
-				a.invoke(null, entity.getCustomClass(), entity.getName(),
-						entity.getID());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		try {
-			Method a = EntityTypes.class.getDeclaredMethod("a", new Class<?>[] {
-					Class.class, String.class, int.class });
-			a.setAccessible(true);
-			a.invoke(null, RideAblePlayer.class, "Player", 78);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		try {
-			Method a = EntityTypes.class.getDeclaredMethod("a", new Class<?>[] {
-					Class.class, String.class, int.class });
-			a.setAccessible(true);
-			a.invoke(null, RideAbleWolf.class, "Wolf", 95);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		// Replaces Entitys in the bioms
-		for (BiomeBase biomeBase : BiomeBase.n()) {
-			if (biomeBase == null) {
-				break;
-			}
-
-			for (String field : new String[] { "K", "J", "L", "M" }) {
-				try {
-					Field list = BiomeBase.class.getDeclaredField(field);
-					list.setAccessible(true);
-					@SuppressWarnings("unchecked")
-					List<BiomeMeta> mobList = (List<BiomeMeta>) list
-							.get(biomeBase);
-
-					for (BiomeMeta meta : mobList) {
-						for (RideAbleEntityType entity : RideAbleEntityType
-								.values()) {
-							if (entity.getNMSClass().equals(meta.b)) {
-								meta.b = entity.getCustomClass();
-							}
-						}
-						if (EntityPlayer.class.equals(meta.b)) {
-							meta.b = RideAblePlayer.class;
-						}
-						if (EntityWolf.class.equals(meta.b)) {
-							meta.b = RideAbleWolf.class;
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
 }
