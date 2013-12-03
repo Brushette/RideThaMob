@@ -18,7 +18,7 @@ public class RideAbleSilverfish extends EntitySilverfish {
 	public void e(float sideMot, float forMot) {
 		if (this.passenger == null || !(this.passenger instanceof EntityHuman)) {
 			super.e(sideMot, forMot);
-			this.height = 0.5F; // Make sure the entity can walk over half slabs,
+			this.X =0.5F; // Make sure the entity can walk over half slabs,
 							// instead of jumping
 			return;
 		}
@@ -27,7 +27,7 @@ public class RideAbleSilverfish extends EntitySilverfish {
 		if (!RideThaMob.control.contains(human.getBukkitEntity().getName())) {
 			// Same as before
 			super.e(sideMot, forMot);
-			this.height = 0.5F;
+			this.X =0.5F;
 			return;
 		}
 
@@ -38,7 +38,7 @@ public class RideAbleSilverfish extends EntitySilverfish {
 		this.b(this.yaw, this.pitch);
 		this.aP = this.aN = this.yaw;
 
-		this.height = 1.0F; // The custom entity will now automatically climb up 1
+		this.X =1.0F; // The custom entity will now automatically climb up 1
 						// high blocks
 
 		sideMot = ((EntityLiving) this.passenger).be * 0.5F;
