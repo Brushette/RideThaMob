@@ -2,13 +2,13 @@ package de.MiniDigger.RideThaMob.Entity;
 
 import java.lang.reflect.Field;
 
+import net.minecraft.server.v1_7_R1.EntityEnderman;
 import net.minecraft.server.v1_7_R1.EntityHuman;
 import net.minecraft.server.v1_7_R1.EntityLiving;
-import net.minecraft.server.v1_7_R1.EntityWolf;
 import net.minecraft.server.v1_7_R1.World;
 import de.MiniDigger.RideThaMob.RideThaMob;
 
-public class RideAbleEnderman extends EntityWolf {
+public class RideAbleEnderman extends EntityEnderman {
 
 	public RideAbleEnderman(World world) {
 		super(world);

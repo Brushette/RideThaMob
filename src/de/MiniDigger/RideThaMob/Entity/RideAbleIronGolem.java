@@ -3,12 +3,12 @@ package de.MiniDigger.RideThaMob.Entity;
 import java.lang.reflect.Field;
 
 import net.minecraft.server.v1_7_R1.EntityHuman;
+import net.minecraft.server.v1_7_R1.EntityIronGolem;
 import net.minecraft.server.v1_7_R1.EntityLiving;
-import net.minecraft.server.v1_7_R1.EntityWolf;
 import net.minecraft.server.v1_7_R1.World;
 import de.MiniDigger.RideThaMob.RideThaMob;
 
-public class RideAbleIronGolem extends EntityWolf {
+public class RideAbleIronGolem extends EntityIronGolem {
 
 	public RideAbleIronGolem(World world) {
 		super(world);

@@ -4,11 +4,11 @@ import java.lang.reflect.Field;
 
 import net.minecraft.server.v1_7_R1.EntityHuman;
 import net.minecraft.server.v1_7_R1.EntityLiving;
-import net.minecraft.server.v1_7_R1.EntityWolf;
+import net.minecraft.server.v1_7_R1.EntityPigZombie;
 import net.minecraft.server.v1_7_R1.World;
 import de.MiniDigger.RideThaMob.RideThaMob;
 
-public class RideAblePigZombie extends EntityWolf {
+public class RideAblePigZombie extends EntityPigZombie{
 
 	public RideAblePigZombie(World world) {
 		super(world);
