@@ -146,7 +146,7 @@ public class RideThaMob extends JavaPlugin {
 	}
 
 	private void setupEntityBlacklist() {
-		entity_blacklist = new ArrayList<>();
+		entity_blacklist = new ArrayList<EntityType>();
 		entity_blacklist.add(EntityType.DROPPED_ITEM);
 		entity_blacklist.add(EntityType.ENDER_CRYSTAL);
 		entity_blacklist.add(EntityType.ENDER_SIGNAL);
