@@ -18,32 +18,17 @@ public class Commands implements CommandExecutor {
 						// Speed Command
 						if (args[0].equalsIgnoreCase("speed")) {
 							if (!p.hasPermission("ridethamob.speed")) {
-								if (RideThaMob.lang.equalsIgnoreCase("de"))
-									p.sendMessage(RideThaMob.cprefix
-											+ "Du hast keinen Zufriff auf den Speed Modus!");
-								else {
-									p.sendMessage(RideThaMob.cprefix
-											+ "You are not allowed to use the speed mode!");
-								}
+								p.sendMessage(RideThaMob.cprefix
+										+ Lang._(LangType.SPEEDMODE_NO_PERM));
 								return true;
 							}
 							if (!RideThaMob.speed.contains(p.getName())) {
-								if (RideThaMob.lang.equalsIgnoreCase("de"))
-									p.sendMessage(RideThaMob.cprefix
-											+ "Speed Modus aktiviert");
-								else {
-									p.sendMessage(RideThaMob.cprefix
-											+ "Speed Mode activated");
-								}
+								p.sendMessage(RideThaMob.cprefix
+										+ Lang._(LangType.SPEEDMODE_ACTIVATED));
 								RideThaMob.speed.add(p.getName());
 							} else {
-								if (RideThaMob.lang.equalsIgnoreCase("de"))
-									p.sendMessage(RideThaMob.cprefix
-											+ "Speed Modus deaktiviert");
-								else {
-									p.sendMessage(RideThaMob.cprefix
-											+ "Speed Mode deactivated");
-								}
+								p.sendMessage(RideThaMob.cprefix
+										+ Lang._(LangType.SPEEDMODE_DEACTIVATED));
 								RideThaMob.speed.remove(p.getName());
 							}
 						} else
@@ -52,20 +37,11 @@ public class Commands implements CommandExecutor {
 							if (p.hasPermission("ridethamob.reload")) {
 								RideThaMob.pl.reloadConfig();
 								RideThaMob.pl.loadConfig();
-								if (RideThaMob.lang.equalsIgnoreCase("de"))
-									p.sendMessage(RideThaMob.cprefix
-											+ "Config neu geladen");
-								else
-									p.sendMessage(RideThaMob.cprefix
-											+ "Config reloaded");
+								p.sendMessage(RideThaMob.cprefix
+										+ Lang._(LangType.CONFIG_RELOADED));
 							} else {
-								if (RideThaMob.lang.equalsIgnoreCase("de"))
-									p.sendMessage(RideThaMob.cprefix
-											+ "Du hast keinen Zufriff auf diesen Befehl!");
-								else {
-									p.sendMessage(RideThaMob.cprefix
-											+ "You are not allowed to use RideThaMob command!");
-								}
+								p.sendMessage(RideThaMob.cprefix
+										+ Lang._(LangType.NO_PERM));
 								return true;
 							}
 
@@ -74,30 +50,17 @@ public class Commands implements CommandExecutor {
 						if (args[0].equalsIgnoreCase("control")) {
 							if (p.hasPermission("ridethamob.control")) {
 								if (!RideThaMob.control.contains(p.getName())) {
-									if (RideThaMob.lang.equalsIgnoreCase("de"))
-										p.sendMessage(RideThaMob.cprefix
-												+ "Control Modus aktiviert");
-									else {
-										p.sendMessage(RideThaMob.cprefix
-												+ "Control Mode activated");
-									}
+									p.sendMessage(RideThaMob.cprefix
+											+ Lang._(LangType.CONTROLMODE_ACTIVATED));
 									RideThaMob.control.add(p.getName());
 								} else {
-									if (RideThaMob.lang.equalsIgnoreCase("de"))
-										p.sendMessage(RideThaMob.cprefix
-												+ "Control Modus deaktiviert");
-									else {
-										p.sendMessage(RideThaMob.cprefix
-												+ "Control Mode deactivated");
-									}
+									p.sendMessage(RideThaMob.cprefix
+											+ Lang._(LangType.CONTROLMODE_DEACTIVATED));
 									RideThaMob.control.remove(p.getName());
 								}
-							} else if (RideThaMob.lang.equalsIgnoreCase("de"))
+							} else {
 								p.sendMessage(RideThaMob.cprefix
-										+ "Du hast keinen Zufriff auf den Control Modus!");
-							else {
-								p.sendMessage(RideThaMob.cprefix
-										+ "You are not allowed to use the control mode!");
+										+ Lang._(LangType.CONTROLMODE_NO_PERM));
 							}
 
 						} else // Nyan Command
@@ -108,79 +71,48 @@ public class Commands implements CommandExecutor {
 									NyanTask task = new NyanTask(RideThaMob.pl);
 									task.start(p);
 								} else {
-									if (RideThaMob.lang.equalsIgnoreCase("de"))
-										p.sendMessage(RideThaMob.cprefix
-												+ "Du bist nicht auf einem Schaf!");
-									else {
-										p.sendMessage(RideThaMob.cprefix
-												+ "You have to ride a sheep to use that command!");
-									}
+									p.sendMessage(RideThaMob.cprefix
+											+ Lang._(LangType.NYAN_NO_SHEEP));
 								}
 
-							} else if (RideThaMob.lang.equalsIgnoreCase("de"))
+							} else {
 								p.sendMessage(RideThaMob.cprefix
-										+ "Du hast keinen Zufriff auf den Nyan Cat Modus!");
-							else {
-								p.sendMessage(RideThaMob.cprefix
-										+ "You are not allowed to use the nyan cat mode!");
+										+ Lang._(LangType.NYAN_NO_PERM));
 							}
 						} else // Update COmmand
 						if (args[0].equalsIgnoreCase("update")) {
 							if (p.hasPermission("ridethamob.update")) {
 								doUpdate(sender);
 
-							} else if (RideThaMob.lang.equalsIgnoreCase("de"))
+							} else {
 								p.sendMessage(RideThaMob.cprefix
-										+ "Du hast keinen Zufriff auf den Updater!");
-							else {
-								p.sendMessage(RideThaMob.cprefix
-										+ "You are not allowed to use the updater!");
+										+ Lang._(LangType.UPDATER_NO_PERM));
 							}
 						} else // Fly command
 						if (args[0].equalsIgnoreCase("fly")) {
 							if (p.hasPermission("ridethamob.fly")) {
 								if (!RideThaMob.fly.contains(p.getName())) {
-									if (RideThaMob.lang.equalsIgnoreCase("de"))
-										p.sendMessage(RideThaMob.cprefix
-												+ "Fly Modus aktiviert");
-									else {
-										p.sendMessage(RideThaMob.cprefix
-												+ "Fly Mode activated");
-									}
+									p.sendMessage(RideThaMob.cprefix
+											+ Lang._(LangType.FLYMODE_ACTIVATED));
 									RideThaMob.fly.add(p.getName());
 								} else {
-									if (RideThaMob.lang.equalsIgnoreCase("de"))
-										p.sendMessage(RideThaMob.cprefix
-												+ "Fly Modus deaktiviert");
-									else {
-										p.sendMessage(RideThaMob.cprefix
-												+ "Fly Mode deactivated");
-									}
+									p.sendMessage(RideThaMob.cprefix
+											+ Lang._(LangType.FLYMODE_DEACTIVATED));
 									RideThaMob.fly.remove(p.getName());
 								}
-							} else if (RideThaMob.lang.equalsIgnoreCase("de"))
+							} else {
 								p.sendMessage(RideThaMob.cprefix
-										+ "Du hast keinen Zufriff auf den Fly Modus!");
-							else {
-								p.sendMessage(RideThaMob.cprefix
-										+ "You are not allowed to use the fly mode!");
+										+ Lang._(LangType.NO_PERM));
 							}
-						} else // command not found
-						if (RideThaMob.lang.equalsIgnoreCase("de")) {
-
-							p.sendMessage(RideThaMob.cprefix
-									+ "Befehl nicht gefunden!");
 						} else {
+							// command not found
 							p.sendMessage(RideThaMob.cprefix
-									+ "Command not found!");
+									+ Lang._(LangType.COMMAND_NOT_FOUND));
 						}
 
-					} else if (RideThaMob.lang.equalsIgnoreCase("de"))
+					} else {
 						p.sendMessage(RideThaMob.cprefix
-								+ "Zu viele Argumente!");
-					else {
-						p.sendMessage(RideThaMob.cprefix
-								+ "Too much arguments!");
+								+ Lang._(LangType.TOO_MANY_ARGS));
 					}
 
 					return true;
@@ -193,12 +125,8 @@ public class Commands implements CommandExecutor {
 				else {
 					RideThaMob.player.remove(p.getName());
 					p.getVehicle().eject();
-					if (RideThaMob.lang.equalsIgnoreCase("de"))
-						p.sendMessage(RideThaMob.cprefix
-								+ "Du kann nun wieder alleine gehen :D");
-					else
-						p.sendMessage(RideThaMob.cprefix
-								+ "Now u can walk on your own feeds again");
+					p.sendMessage(RideThaMob.cprefix
+							+ Lang._(LangType.RIDE_HOP_OFF));
 				}
 			}
 			// version anzeigen
@@ -228,29 +156,19 @@ public class Commands implements CommandExecutor {
 		if (RideThaMob.update) {
 			RideThaMob.pl.getLogger().info(
 					"Starting Update. This may take a little while!");
+			s.sendMessage(RideThaMob.cprefix + Lang._(LangType.UPDATE_START));
 			Updater updater = new Updater(RideThaMob.pl, 53240,
 					RideThaMob.file, Updater.UpdateType.NO_VERSION_CHECK, true);
 			if (updater.getResult() != Updater.UpdateResult.SUCCESS) {
-				if (RideThaMob.lang.equalsIgnoreCase("de"))
-					s.sendMessage(RideThaMob.cprefix + "Fehler beim Updaten! "
-							+ updater.getResult());
-				else {
-					s.sendMessage(RideThaMob.cprefix + "Error while updating! "
-							+ updater.getResult());
-				}
-			} else if (RideThaMob.lang.equalsIgnoreCase("de"))
 				s.sendMessage(RideThaMob.cprefix
-						+ "Das Plugin wurde erfolgreich Upgedatet! Beim n" + Character.toString((char)228) + "chsten Neustart wirst du die neuste Version haben");
-			else {
+						+ Lang._(LangType.UPDATE_FAILED));
+			} else {
 				s.sendMessage(RideThaMob.cprefix
-						+ "Plugin updatet! Please restart your server!");
+						+ Lang._(LangType.UPDATE_SUCCESS));
 			}
-		} else if (RideThaMob.lang.equalsIgnoreCase("de"))
+		} else {
 			s.sendMessage(RideThaMob.cprefix
-					+ "Du hast bereits die neuste Version!");
-		else {
-			s.sendMessage(RideThaMob.cprefix
-					+ "You have to already have newest version!");
+					+ Lang._(LangType.UPDATE_UP_TO_DATE));
 		}
 	}
 }

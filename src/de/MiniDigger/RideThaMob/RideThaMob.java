@@ -16,7 +16,6 @@ import de.MiniDigger.RideThaMob.Entity.RideAbleEntityType;
 public class RideThaMob extends JavaPlugin {
 	public static String prefix;
 	public static String cprefix;
-	public static String lang;
 	public static double defaultspeed;
 	public static double maxspeed;
 	public static int nyan_change_speed;
@@ -87,7 +86,6 @@ public class RideThaMob extends JavaPlugin {
 	public void loadConfig() {
 		saveDefaultConfig();
 
-		RideThaMob.lang = getConfig().getString("lang");
 		RideThaMob.defaultspeed = getConfig().getDouble("defaultspeed");
 		RideThaMob.maxspeed = getConfig().getDouble("maxspeed");
 		nyan_change_speed = getConfig().getInt("nyan_change_speed");

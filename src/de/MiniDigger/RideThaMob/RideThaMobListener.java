@@ -3,7 +3,6 @@ package de.MiniDigger.RideThaMob;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
@@ -27,25 +26,11 @@ public class RideThaMobListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		if (e.getPlayer().hasPermission("ridethamob.update")
 				&& RideThaMob.update) {
-			if (RideThaMob.lang.equalsIgnoreCase("de")) {
-				e.getPlayer().sendMessage(
-						ChatColor.YELLOW + "Es ist ein Update verf" + Character.toString((char)252) + "gbar: "
-								+ RideThaMob.updater.getLatestName() + "("
+			e.getPlayer().sendMessage(RideThaMob.cprefix
+					+ Lang._(LangType.UPDATE_AVAILABLE_1) + RideThaMob.updater.getLatestName() + "("
 								+ RideThaMob.updater.getLatestType() + ")");
-				e.getPlayer()
-						.sendMessage(
-								ChatColor.YELLOW
-										+ "Benutze '/ridethamob update' wenn du updaten willst.");
-			} else {
-				e.getPlayer().sendMessage(
-						ChatColor.YELLOW + "An update is available: "
-								+ RideThaMob.updater.getLatestName() + "("
-								+ RideThaMob.updater.getLatestType() + ")");
-				e.getPlayer()
-						.sendMessage(
-								ChatColor.YELLOW
-										+ "Type '/ridethamob update' if you would like to update.");
-			}
+			e.getPlayer().sendMessage(RideThaMob.cprefix
+					+ Lang._(LangType.UPDATE_AVAILABLE_2));
 
 		}
 	}
@@ -147,13 +132,7 @@ public class RideThaMobListener implements Listener {
 
 			}
 		}
-		
-		if (RideThaMob.lang.equalsIgnoreCase("de"))
-			p.sendMessage(RideThaMob.cprefix
-					+ "Es ist kein Reittier im Umkreis von 10 Bl" + Character.toString((char)246) + "cken das du reiten darfst!");
-		else
-			p.sendMessage(RideThaMob.cprefix
-					+ "There is not mob in a radius of 10 blocks that you allowed to ride!");
+		p.sendMessage(RideThaMob.cprefix + Lang._(LangType.RIDE_NO_NEAR));
 	}
 
 	/**
@@ -166,25 +145,13 @@ public class RideThaMobListener implements Listener {
 		if (e.getType() == EntityType.ENDER_DRAGON) {
 			EnderDragon dr = (EnderDragon) e;
 			dr.setPassenger(p);
-			if (RideThaMob.lang.equalsIgnoreCase("de"))
-				p.sendMessage(RideThaMob.cprefix
-						+ "Du reitest jetzt einen Enderdrachen!");
-			else {
-				p.sendMessage(RideThaMob.cprefix
-						+ "You are now riding a EnderDragon!");
-			}
+			p.sendMessage(RideThaMob.cprefix + Lang._(LangType.RIDE_DRAGON));
 			return;
 		}
 		if (e.getType() == EntityType.GIANT) {
 			Giant g = (Giant) e;
 			g.setPassenger(p);
-			if (RideThaMob.lang.equalsIgnoreCase("de"))
-				p.sendMessage(RideThaMob.cprefix
-						+ "Du reitest jetzt einen Giganten!");
-			else {
-				p.sendMessage(RideThaMob.cprefix
-						+ "You are now riding a Giant!");
-			}
+			p.sendMessage(RideThaMob.cprefix + Lang._(LangType.RIDE_GIANT));
 		}
 		if (e.getType() == EntityType.PLAYER) {
 			Player o = (Player) e;
@@ -192,34 +159,17 @@ public class RideThaMobListener implements Listener {
 					|| (p.hasPermission("ridethamob.player." + p.getName()))) {
 				o.setPassenger(p);
 
-				if (RideThaMob.lang.equalsIgnoreCase("de"))
-					p.sendMessage(RideThaMob.cprefix + "Du reitest jetzt "
-							+ o.getDisplayName());
-				else {
-					p.sendMessage(RideThaMob.cprefix + "You are now riding "
-							+ o.getDisplayName() + "!");
-				}
+				p.sendMessage(RideThaMob.cprefix
+						+ Lang._(LangType.RIDE_PLAYER, o.getDisplayName()));
 				return;
 			}
-			if (RideThaMob.lang.equalsIgnoreCase("de"))
-				p.sendMessage(RideThaMob.cprefix + "Du darfst "
-						+ o.getDisplayName() + " nicht reiten!");
-			else {
-				p.sendMessage(RideThaMob.cprefix
-						+ "You are not allowed to ride " + o.getDisplayName()
-						+ "!");
-			}
+			p.sendMessage(RideThaMob.cprefix
+					+ Lang._(LangType.RIDE_PLAYER_NO_PERM, o.getDisplayName()));
 		}
 
 		e.setPassenger(p);
 
-		if (RideThaMob.lang.equalsIgnoreCase("de"))
-			p.sendMessage(RideThaMob.cprefix + "Du reitest jetzt ein(e)"
-					+ e.getType());
-		else
-			p.sendMessage(RideThaMob.cprefix + "You are now riding a "
-					+ e.getType());
-
+		p.sendMessage(RideThaMob.cprefix + Lang._(LangType.RIDE));
 	}
 
 }
