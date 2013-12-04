@@ -4,9 +4,9 @@ nyan_change_speed: 20 # how fast the color should change in ticks (20 ticks = 1 
 check_for_updates: true
 msgs:
     speedmode_activated: 'Speed Mode activated'
-    speedmode_deactivated:'Speed Mode deactivated'
-    speedmode_no_perm:'You are not allowed to use the speed mode!'
-    flymode_activated:'Fly Mode activated'
+    speedmode_deactivated: 'Speed Mode deactivated'
+    speedmode_no_perm: 'You are not allowed to use the speed mode!'
+    flymode_activated: 'Fly Mode activated'
     flymode_deactivated: 'Fly Mode deactivated'
     flymode_no_perm: 'You are not allowed to use the fly mode!'
     controlmode_activated: 'Control Mode activated'
@@ -22,7 +22,7 @@ msgs:
     ride_player: 'You are now riding %0%'
     ride_player_no_perm: 'You are not allowed to ride %0%!'
     update_available_1: 'An update is available: '
-    update_available_2: 'Benutze '/ridethamob update' wenn du updaten willst.'
+    update_available_2: 'Type /ridethamob update if you would like to update.'
     update_failed: 'Error while updating! '
     update_success: 'Plugin updated! Please restart your server!'
     update_start: 'Starting Update. This may take a little while!'
@@ -35,9 +35,9 @@ msgs:
 # De Version:
 # msgs:
     # speedmode_activated: 'Speed Modus aktiviert'
-    # speedmode_deactivated:'Speed Modus deaktiviert'
-    # speedmode_no_perm:'Du hast keinen Zufriff auf den Speed Modus!'
-    # flymode_activated:'Fly Modus aktiviert'
+    # speedmode_deactivated: 'Speed Modus deaktiviert'
+    # speedmode_no_perm: 'Du hast keinen Zufriff auf den Speed Modus!'
+    # flymode_activated: 'Fly Modus aktiviert'
     # flymode_deactivated: 'Fly Modus deaktiviert'
     # flymode_no_perm: 'Du hast keinen Zufriff auf den Fly Modus!'
     # controlmode_activated: 'Control Modus aktiviert'
@@ -53,7 +53,7 @@ msgs:
     # ride_player: 'Du reitest jetzt %0%'
     # ride_player_no_perm: 'Du darfst %0% nicht reiten!'
     # update_available_1: 'Es ist ein Update verfügbar: '
-    # update_available_2: 'Type '/ridethamob update' if you would like to update.'
+    # update_available_2: 'Benutze /ridethamob update wenn du updaten willst.'
     # update_failed: 'Fehler beim Updaten! '
     # update_success: 'Das Plugin wurde erfolgreich Upgedatet! Beim nächsten Neustart wirst du die neuste Version haben'
     # update_start: 'Starte Update. Dies kann eine Weile dauern'

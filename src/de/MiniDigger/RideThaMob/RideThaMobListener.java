@@ -169,7 +169,7 @@ public class RideThaMobListener implements Listener {
 
 		e.setPassenger(p);
 
-		p.sendMessage(RideThaMob.cprefix + Lang._(LangType.RIDE));
+		p.sendMessage(RideThaMob.cprefix + Lang._(LangType.RIDE) + e.getType().name());
 	}
 
 }

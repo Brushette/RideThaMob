@@ -96,6 +96,7 @@ public class RideThaMob extends JavaPlugin {
 			RideThaMob.check_update = false;
 			getConfig().set("check_for_updates", false);
 		}
+		new Lang();
 	}
 
 	private void setupUpdater() {
