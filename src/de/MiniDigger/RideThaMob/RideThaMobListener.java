@@ -116,7 +116,7 @@ public class RideThaMobListener implements Listener {
 	public static void checkNearRideable(Player p) {
 		RideThaMob.player.add(p.getName());
 		List<Entity> l = new ArrayList<Entity>();
-		for (int i = 1; i < 11; i++) {
+		for (int i = 1; i < (RideThaMob.pl.getConfig().getInt("entity_check_radius")+1); i++) {
 			l = p.getNearbyEntities(i, i, i);
 			if (!l.isEmpty()) {
 				for (Entity e : l) {
@@ -132,7 +132,7 @@ public class RideThaMobListener implements Listener {
 
 			}
 		}
-		p.sendMessage(RideThaMob.cprefix + Lang._(LangType.RIDE_NO_NEAR));
+		p.sendMessage(RideThaMob.cprefix + Lang._(LangType.RIDE_NO_NEAR,RideThaMob.pl.getConfig().getInt("entity_check_radius")+""));
 	}
 
 	/**

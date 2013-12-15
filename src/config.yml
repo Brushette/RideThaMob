@@ -1,6 +1,7 @@
 defaultspeed: 1.0 # normal speed default: 1.0
 maxspeed: 1.5 # speedmode speed default: 1.5
 nyan_change_speed: 20 # how fast the color should change in ticks (20 ticks = 1 sec)
+entity_check_radius: 10 # the radius it look for entitys to ride
 check_for_updates: true
 msgs:
     speedmode_activated: 'Speed Mode activated'
@@ -16,7 +17,7 @@ msgs:
     nyan_no_perm: 'You are not allowed to use the nyan cat mode!'
     ride: 'You are now riding a '
     ride_hop_off: 'Now u can walk on your own feeds again'
-    ride_no_near: 'There is not mob in a radius of 10 blocks that you allowed to ride!'
+    ride_no_near: 'There is not mob in a radius of %0% blocks that you allowed to ride!'
     ride_dragon: 'You are now riding a EnderDragon!'
     ride_giant: 'You are now riding a Giant!'
     ride_player: 'You are now riding %0%'
