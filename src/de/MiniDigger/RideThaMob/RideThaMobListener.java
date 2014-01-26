@@ -26,11 +26,12 @@ public class RideThaMobListener implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		if (e.getPlayer().hasPermission("ridethamob.update")
 				&& RideThaMob.update) {
-			e.getPlayer().sendMessage(RideThaMob.cprefix
-					+ Lang._(LangType.UPDATE_AVAILABLE_1) + RideThaMob.updater.getLatestName() + "("
-								+ RideThaMob.updater.getLatestType() + ")");
-			e.getPlayer().sendMessage(RideThaMob.cprefix
-					+ Lang._(LangType.UPDATE_AVAILABLE_2));
+			e.getPlayer().sendMessage(
+					RideThaMob.cprefix + Lang._(LangType.UPDATE_AVAILABLE_1)
+							+ RideThaMob.updater.getLatestName() + "("
+							+ RideThaMob.updater.getLatestType() + ")");
+			e.getPlayer().sendMessage(
+					RideThaMob.cprefix + Lang._(LangType.UPDATE_AVAILABLE_2));
 
 		}
 	}
@@ -116,23 +117,35 @@ public class RideThaMobListener implements Listener {
 	public static void checkNearRideable(Player p) {
 		RideThaMob.player.add(p.getName());
 		List<Entity> l = new ArrayList<Entity>();
-		for (int i = 1; i < (RideThaMob.pl.getConfig().getInt("entity_check_radius")+1); i++) {
+		for (int i = 1; i < (RideThaMob.pl.getConfig().getInt(
+				"entity_check_radius") + 1); i++) {
 			l = p.getNearbyEntities(i, i, i);
 			if (!l.isEmpty()) {
 				for (Entity e : l) {
 					if (!RideThaMob.entity_blacklist.contains(e.getType())) {
-
 						if (p.hasPermission("ridethamob.mob."
 								+ e.getType().toString())) {
-							ride(p, e);
-							return;
+							if (e.getPassenger() == null) {
+								if (p.getPassenger() != null) {
+									if (p.getPassenger().getEntityId() != e
+											.getEntityId()) {
+										ride(p, e);
+										return;
+									}
+								} else {
+									ride(p, e);
+									return;
+								}
+							}
 						}
 					}
 				}
 
 			}
 		}
-		p.sendMessage(RideThaMob.cprefix + Lang._(LangType.RIDE_NO_NEAR,RideThaMob.pl.getConfig().getInt("entity_check_radius")+""));
+		p.sendMessage(RideThaMob.cprefix
+				+ Lang._(LangType.RIDE_NO_NEAR, RideThaMob.pl.getConfig()
+						.getInt("entity_check_radius") + ""));
 	}
 
 	/**
@@ -169,7 +182,8 @@ public class RideThaMobListener implements Listener {
 
 		e.setPassenger(p);
 
-		p.sendMessage(RideThaMob.cprefix + Lang._(LangType.RIDE) + e.getType().name());
+		p.sendMessage(RideThaMob.cprefix + Lang._(LangType.RIDE)
+				+ e.getType().name());
 	}
 
 }
