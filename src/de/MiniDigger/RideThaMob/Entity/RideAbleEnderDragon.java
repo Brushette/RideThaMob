@@ -68,7 +68,7 @@ public class RideAbleEnderDragon extends EntityEnderDragon {
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

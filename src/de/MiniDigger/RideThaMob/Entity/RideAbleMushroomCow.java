@@ -68,7 +68,7 @@ public class RideAbleMushroomCow extends EntityMushroomCow {
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

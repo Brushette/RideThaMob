@@ -68,7 +68,7 @@ public class RideAbleEnderman extends EntityEnderman {
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

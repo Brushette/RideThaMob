@@ -68,7 +68,7 @@ public class RideAbleHorse extends EntityHorse {
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

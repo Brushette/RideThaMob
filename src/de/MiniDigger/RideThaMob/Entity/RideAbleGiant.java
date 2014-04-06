@@ -68,7 +68,7 @@ public class RideAbleGiant extends EntityGiantZombie {
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

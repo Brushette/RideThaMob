@@ -68,7 +68,7 @@ public class RideAbleIronGolem extends EntityIronGolem {
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

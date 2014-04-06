@@ -68,7 +68,7 @@ public class RideAbleSilverfish extends EntitySilverfish {
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

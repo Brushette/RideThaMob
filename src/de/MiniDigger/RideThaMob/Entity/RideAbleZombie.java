@@ -68,8 +68,7 @@ public class RideAbleZombie extends EntityZombie {
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException
-				| SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

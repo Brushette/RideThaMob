@@ -68,7 +68,7 @@ public class RideAbleSnowman extends EntitySnowman {
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

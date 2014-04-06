@@ -68,7 +68,7 @@ public class RideAblePigZombie extends EntityPigZombie{
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

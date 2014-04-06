@@ -68,7 +68,7 @@ public class RideAbleSkeleton extends EntitySkeleton {
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

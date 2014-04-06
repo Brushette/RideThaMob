@@ -68,8 +68,7 @@ public class RideAbleCow extends EntityCow {
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException
-				| SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

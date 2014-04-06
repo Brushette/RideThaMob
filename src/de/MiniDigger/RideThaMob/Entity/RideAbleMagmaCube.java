@@ -68,7 +68,7 @@ public class RideAbleMagmaCube extends EntityMagmaCube {
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -68,7 +68,7 @@ public class RideAbleBlaze extends EntityBlaze{
 											// entity jumping
 				}
 			}
-		} catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
