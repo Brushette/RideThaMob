@@ -30,7 +30,7 @@ public class RideThaMob extends JavaPlugin {
 	public static boolean update;
 	public static File file;
 	public static boolean check_update;
-	private String version = "(MC: 1.7.2)";
+	private String version = "(MC: 1.7.5)";
 
 	public void onEnable() {
 		pl = this;
