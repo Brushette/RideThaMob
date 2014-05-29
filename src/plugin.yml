@@ -1,6 +1,6 @@
 name: RideThaMob
 author: MiniDigger
-version: ${project.version}-b${BUILD_NUMBER}
+version: ${project.version}
 main: de.MiniDigger.RideThaMob.RideThaMob
 commands:
   RideThaMob:
