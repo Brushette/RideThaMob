@@ -2,10 +2,10 @@ package de.MiniDigger.RideThaMob.Entity;
 
 import java.lang.reflect.Field;
 
-import net.minecraft.server.v1_7_R2.EntityHuman;
-import net.minecraft.server.v1_7_R2.EntityLiving;
-import net.minecraft.server.v1_7_R2.EntityWither;
-import net.minecraft.server.v1_7_R2.World;
+import net.minecraft.server.v1_7_R3.EntityHuman;
+import net.minecraft.server.v1_7_R3.EntityLiving;
+import net.minecraft.server.v1_7_R3.EntityWither;
+import net.minecraft.server.v1_7_R3.World;
 import de.MiniDigger.RideThaMob.RideThaMob;
 
 public class RideAbleWither extends EntityWither {
