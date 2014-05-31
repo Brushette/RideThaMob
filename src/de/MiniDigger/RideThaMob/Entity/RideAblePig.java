@@ -30,7 +30,6 @@ public class RideAblePig extends EntityPig {
 			this.W = 0.5F;
 			return;
 		}
-		System.out.println("change! pig");
 		this.lastYaw = this.yaw = this.passenger.yaw;
 		this.pitch = this.passenger.pitch * 0.5F;
 
