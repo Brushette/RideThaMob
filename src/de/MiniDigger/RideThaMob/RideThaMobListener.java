@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -76,6 +77,19 @@ public class RideThaMobListener implements Listener {
 			if (p.hasPermission("ridethamob.god")) {
 				e.setDamage(0.0);
 				e.setCancelled(true);
+			}
+		}
+	}
+
+	@EventHandler
+	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
+		if (e.getEntity() instanceof Player) {
+			if (e.getEntity().isInsideVehicle()) {
+				if (e.getDamager().getEntityId() == e.getEntity().getVehicle()
+						.getEntityId()) {
+					e.setDamage(0.0);
+					e.setCancelled(true);
+				}
 			}
 		}
 	}
