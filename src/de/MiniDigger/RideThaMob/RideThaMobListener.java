@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -88,6 +89,17 @@ public class RideThaMobListener implements Listener {
 				if (e.getDamager().getEntityId() == e.getEntity().getVehicle()
 						.getEntityId()) {
 					e.setDamage(0.0);
+					e.setCancelled(true);
+				}
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onTarget(EntityTargetLivingEntityEvent e){
+		if(e.getTarget().getType() == EntityType.PLAYER){
+			if(e.getTarget().isInsideVehicle()){
+				if(e.getEntity().getEntityId() == e.getTarget().getVehicle().getEntityId()){
 					e.setCancelled(true);
 				}
 			}
