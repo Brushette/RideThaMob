@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -94,13 +95,19 @@ public class RideThaMobListener implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler
-	public void onTarget(EntityTargetLivingEntityEvent e){
-		if(e.getTarget().getType() == EntityType.PLAYER){
-			if(e.getTarget().isInsideVehicle()){
-				if(e.getEntity().getEntityId() == e.getTarget().getVehicle().getEntityId()){
+	public void onTarget(EntityTargetLivingEntityEvent e) {
+		if (e.getTarget().getType() == EntityType.PLAYER) {
+			if (e.getTarget().isInsideVehicle()) {
+				if (e.getEntity().getEntityId() == e.getTarget().getVehicle()
+						.getEntityId()) {
 					e.setCancelled(true);
+					e.setTarget(null);
+					if (e instanceof Creature) {
+						Creature c = (Creature) e;
+						c.setTarget(null);
+					}
 				}
 			}
 		}
@@ -181,6 +188,10 @@ public class RideThaMobListener implements Listener {
 	 * @param e
 	 */
 	public static void ride(Player p, Entity e) {
+		if (e instanceof Creature) {
+			((Creature) e).setTarget(null);
+		}
+
 		if (e.getType() == EntityType.ENDER_DRAGON) {
 			EnderDragon dr = (EnderDragon) e;
 			dr.setPassenger(p);
