@@ -104,7 +104,7 @@ public class RideThaMobListener implements Listener {
 						.getEntityId()) {
 					e.setCancelled(true);
 					e.setTarget(null);
-					if (e instanceof Creature) {
+					if (e.getEntity() instanceof Creature) {
 						Creature c = (Creature) e;
 						c.setTarget(null);
 					}
