@@ -215,6 +215,7 @@ public class RideThaMobListener implements Listener {
 			}
 			p.sendMessage(RideThaMob.cprefix
 					+ Lang._(LangType.RIDE_PLAYER_NO_PERM, o.getDisplayName()));
+			return;
 		}
 
 		e.setPassenger(p);
