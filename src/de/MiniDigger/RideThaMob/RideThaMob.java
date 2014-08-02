@@ -58,9 +58,12 @@ public class RideThaMob extends JavaPlugin {
 		RideThaMob.player = new ArrayList<String>();
 		RideThaMob.fly = new ArrayList<String>();
 
-		if (Bukkit.getVersion().contains(version)) {
+		//if (Bukkit.getVersion().contains(version)) {
+		//	RideAbleEntityType.registerEntities();
+		//} else {
+		try{
 			RideAbleEntityType.registerEntities();
-		} else {
+		}catch(Exception ex){
 			Bukkit.getConsoleSender()
 					.sendMessage(
 							ChatColor.YELLOW
