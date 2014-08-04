@@ -66,7 +66,10 @@ public class Lang {
 							Paths.get(RideThaMob.pl.getDataFolder() + File.separator
 									+ "msgs.properties"), Charset.defaultCharset());
 				} catch (IOException ex) {
-					
+					Bukkit.getConsoleSender()
+					.sendMessage(
+							ChatColor.RED
+									+ "[RideThaMob] WARINING: Failed to create a new msg file!!");
 				}
 			} catch (IOException e1) {
 				Bukkit.getConsoleSender()
@@ -101,6 +104,9 @@ public class Lang {
 				trans.put(type, r);
 				return r;
 			}
+		}
+		if(lines.size() == 0){
+			new Lang();
 		}
 		return type.name();
 		// return config.getString("msgs." + type.name().toLowerCase());
