@@ -58,12 +58,12 @@ public class RideThaMob extends JavaPlugin {
 		RideThaMob.player = new ArrayList<String>();
 		RideThaMob.fly = new ArrayList<String>();
 
-		//if (Bukkit.getVersion().contains(version)) {
-		//	RideAbleEntityType.registerEntities();
-		//} else {
-		try{
+		// if (Bukkit.getVersion().contains(version)) {
+		// RideAbleEntityType.registerEntities();
+		// } else {
+		try {
 			RideAbleEntityType.registerEntities();
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			Bukkit.getConsoleSender()
 					.sendMessage(
 							ChatColor.YELLOW
@@ -87,7 +87,9 @@ public class RideThaMob extends JavaPlugin {
 	}
 
 	public void loadConfig() {
-		saveDefaultConfig();
+		if (!getConfig().contains("msg")) {
+			saveDefaultConfig();
+		}
 
 		RideThaMob.defaultspeed = getConfig().getDouble("defaultspeed");
 		RideThaMob.maxspeed = getConfig().getDouble("maxspeed");
