@@ -37,6 +37,7 @@ public class Commands implements CommandExecutor {
 							if (p.hasPermission("ridethamob.reload")) {
 								RideThaMob.pl.reloadConfig();
 								RideThaMob.pl.loadConfig();
+								new Lang();
 								p.sendMessage(RideThaMob.cprefix
 										+ Lang._(LangType.CONFIG_RELOADED));
 							} else {
