@@ -157,7 +157,7 @@ public class RideThaMobListener implements Listener {
 				for (Entity e : l) {
 					if (!RideThaMob.entity_blacklist.contains(e.getType())) {
 						if (p.hasPermission("ridethamob.mob."
-								+ e.getType().toString())) {
+								+ e.getType().name())) {
 							if (e.getPassenger() == null) {
 								if (p.getPassenger() != null) {
 									if (p.getPassenger().getEntityId() != e
