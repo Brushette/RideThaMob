@@ -134,15 +134,8 @@ public enum RideAbleEntityType {
 		for (RideAbleEntityType entity : values())
 			a(entity.getCustomClass(), entity.getName(), entity.getID());
 
-		// BiomeBase#biomes became private.
-		BiomeBase[] biomes;
-		try {
-			biomes = (BiomeBase[]) getPrivateStatic(BiomeBase.class, "biomes");
-		} catch (Exception exc) {
-			// Unable to fetch.
-			return;
-		}
-		for (BiomeBase biomeBase : biomes) {
+		// BiomeBase#biomes became private. But we can use the public method getBiomes() to get the array
+		for (BiomeBase biomeBase : BiomeBase.getBiomes()){
 			if (biomeBase == null)
 				break;
 
